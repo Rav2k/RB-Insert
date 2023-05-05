@@ -126,12 +126,24 @@ void print(node *cur2, int layers){
   print(cur2->left, layers+1);//print the left side
 }
 
- void cases(node*&cur3){  
+ void cases(node*&cur3){
+   //#case 0: Root is black
+   node *temp;
+   temp = cur3;
+   while(temp->parent !=NULL){
+     temp = temp->parent;
+   }
+   if(temp->color != 1){
+     temp->color =1;
+   }else{
+     //do notthing
+   }
+   
   //case #1: Uncle is red
   if(cur3->parent != NULL &&cur3->parent->parent != NULL && cur3->parent->parent->right != NULL && cur3->parent->parent->left != NULL){
           cout<<"Nothing is NULL"<<endl;
         if(cur3->parent->data>cur3->parent->parent->data && cur3->parent->parent->left != NULL){
-          cout<<"Uncle is on the left"<<endl;
+          //Uncle is on the left
           if(cur3->parent->parent->left->color == 2){
             cur3->parent->parent->left->color = 1;
             cur3->parent->color = 1;
@@ -143,7 +155,7 @@ void print(node *cur2, int layers){
             }
           }
         }else if(cur3->parent->data<cur3->parent->parent->data && cur3->parent->parent->right != NULL){
-          cout<<"Uncle is on right"<<endl;
+          //Uncle is on right
           if(cur3->parent->parent->right->color == 2){
             cur3->parent->parent->right->color = 1;
 	    cur3->parent->parent->color = 2;
@@ -155,9 +167,86 @@ void print(node *cur2, int layers){
 	      }
           }
         }
-	
+	cases(cur3->parent->parent);
        }
 
-  cout<<"check complete...proceed..."<<endl;
+  //case #2:Uncle is black(triangle)
+
+  if(cur3->parent != NULL &&cur3->parent->parent != NULL && cur3->parent->parent->right != NULL && cur3->parent->parent->left != NULL){
+
+    if(cur3->parent->data>cur3->parent->parent->data && cur3->parent->parent->left != NULL){
+      //Uncle is on the left
+      if(cur3->parent->parent->left->color = 1 && cur3->parent->left == cur3){
+	cur3->parent->parent->right = cur3;
+	cur3->right = cur3->parent;
+	
+	//making sure everthing points right
+	cur3->parent->parent->right->parent = cur3->parent->parent;
+	cur3->right->parent = cur3;
+	return;
+      }else{
+	//do nothing
+      }
+    }
+
+    else if(cur3->parent->data<cur3->parent->parent->data && cur3->parent->parent->right != NULL){
+      //Uncle is on right
+      if(cur3->parent->parent->right->color = 1 && cur3->parent->right == cur3){
+	cur3->parent->parent->left = cur3;
+	cur3->left = cur3->parent;
+	//making everything right
+	cur3->parent->parent->left->parent = cur3->parent->parent;
+	cur3->left->parent = cur3;
+	return;
+      }else{
+	//do nothing 
+      }
+    }
+  }
+  
+  cout<<"case two finished"<<endl;
+    //case #3: Uncle is black(line)
+  
+    if(cur3->parent != NULL &&cur3->parent->parent != NULL && cur3->parent->parent->right != NULL && cur3->parent->parent->left != NULL){
+
+      if(cur3->parent->data>cur3->parent->parent->data && cur3->parent->parent->left != NULL){
+	//uncle on left
+	if(cur3->parent->parent->left->color = 1 && cur3->parent->right == cur3){
+	  if(cur3->parent->left!=NULL){
+            cur3->parent->parent->right = cur3->parent->left;
+          }
+	  cur3->parent->left = cur3->parent->parent;
+	  cur3->parent->parent->left = cur3->parent->parent->left;
+	  cur3->parent->right = cur3;
+	  cur3->parent->color = 1;
+	  cur3->parent->parent->color = 2;
+	  return;
+	}else{
+	  //do nothing
+	  return;
+	}
+      }
+
+      else if(cur3->parent->data<cur3->parent->parent->data && cur3->parent->parent->right != NULL){
+	//uncle is right
+        if(cur3->parent->parent->right->color = 1 && cur3->parent->left == cur3){
+	  if(cur3->parent->right != NULL){
+            cur3->parent->parent->left = cur3->parent->right;
+          }
+	  cur3->parent->right = cur3->parent->parent;
+          cur3->parent->parent->right = cur3->parent->parent->right;
+          cur3->parent->left = cur3;
+          cur3->parent->color = 1;
+          cur3->parent->parent->color = 2;
+	  return;
+	}else{
+          //do nothing
+	  return;
+        }
+      }
+      }
+    
+  cout<<"Nothing needed to be checked"<<endl;
   return;
 }
+
