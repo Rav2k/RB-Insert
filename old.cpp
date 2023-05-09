@@ -114,7 +114,7 @@ void insert(node *&cur, int number){//adding in a number to the tree!(all the nu
     case0(cur);
     cases(cur);
     case2(cur);
-  }
+ }
 
 void print(node *cur2, int layers){
   if(cur2 == NULL){
@@ -181,6 +181,7 @@ void fileGen(){//taking the numbers from the text file and making the base tree
     insert(root, num);
     counter++;
   }
+
 }
 
 void case0(node*&cur3){
@@ -217,7 +218,7 @@ void case2(node*&cur3){
 
     else if(cur3->parent->data<cur3->parent->parent->data && cur3->parent->parent->right != NULL){
       //Uncle is on right
-      if(cur3->parent->parent->right->color = 1 && cur3->parent->right == cur3){
+      if(cur3->parent->parent->right->color == 1 && cur3->parent->right == cur3){
         node *temp;
         node *temp2;
         temp = cur3->left;
@@ -238,8 +239,7 @@ void case2(node*&cur3){
 }
 
 void case3(node*&cur3){
-  if(cur3->parent != NULL &&cur3->parent->parent != NULL && cur3->parent->parent->right != NULL && c\
-ur3->parent->parent->left != NULL){
+  if(cur3->parent != NULL &&cur3->parent->parent != NULL && cur3->parent->parent->right != NULL && cur3->parent->parent->left != NULL){
 
       if(cur3->parent->data>cur3->parent->parent->data && cur3->parent->parent->left != NULL){
         //uncle on left
