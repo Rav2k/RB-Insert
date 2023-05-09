@@ -114,7 +114,6 @@ void insert(node *&cur, int number){//adding in a number to the tree!(all the nu
     case0(cur);
     cases(cur);
     case2(cur);
-    cout<<"done with all cases"<<endl;
   }
 
 void print(node *cur2, int layers){
@@ -134,9 +133,9 @@ void print(node *cur2, int layers){
  void cases(node*&cur3){  
   //case #1: Uncle is red
   if(cur3->parent != NULL &&cur3->parent->parent != NULL && cur3->parent->parent->right != NULL && cur3->parent->parent->left != NULL){
-          cout<<"Nothing is NULL"<<endl;
+          
         if(cur3->parent->data>cur3->parent->parent->data && cur3->parent->parent->left != NULL){
-          cout<<"Uncle is on the left"<<endl;
+          //cout<<"Uncle is on the left"<<endl;
           if(cur3->parent->parent->left->color == 2){
             cur3->parent->parent->left->color = 1;
             cur3->parent->color = 1;
@@ -148,7 +147,7 @@ void print(node *cur2, int layers){
             }
           }
         }else if(cur3->parent->data<cur3->parent->parent->data && cur3->parent->parent->right != NULL){
-          cout<<"Uncle is on right"<<endl;
+          //cout<<"Uncle is on right"<<endl;
           if(cur3->parent->parent->right->color == 2){
             cur3->parent->parent->right->color = 1;
 	    cur3->parent->parent->color = 2;
@@ -164,27 +163,24 @@ void print(node *cur2, int layers){
        }
   return;
 }
-
-void fileGen(){
-  vector<int> numText;
-  ifstream text("numbers_for_Red_Black_Tree.txt");
+//used the smae generating function as binary tree
+void fileGen(){//taking the numbers from the text file and making the base tree
+  ifstream numbers("numbers2.txt");
   srand(time(NULL));
-  int number =0;
-  while(!text.eof()){
-    text>>number;
-    numText.push_back(number);
+  int num = 0;
+  vector<int> nums;
+  while (!numbers.eof()) {
+    numbers >> num;
+    nums.push_back(num);
   }
-  int index=0;
-  int count=0;
-  while(count != 10){
-    index = (rand() % 999) +1;
-    number = numText.at(index);
-    cout<<number<<" ";
-    insert(root, number);
-    count++;
+  int randomIndex = 0;
+  int counter = 0;
+  while (counter != 10) {
+    randomIndex = (rand() % nums.size()) + 1;
+    num = nums.at(randomIndex);
+    insert(root, num);
+    counter++;
   }
-  //done
-  return;
 }
 
 void case0(node*&cur3){
