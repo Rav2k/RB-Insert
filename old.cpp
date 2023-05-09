@@ -198,7 +198,41 @@ void case0(node*&cur3){
 
 }
 
-void case2(node*&cur3){
+void case2(node*& cur3) {
+  if (cur3->parent != NULL && cur3->parent->parent != NULL) {
+    if (cur3->parent->data > cur3->parent->parent->data && cur3->parent->parent->left != NULL) {
+      // Uncle is on the left
+      if (cur3->parent->parent->left->color == 1 && cur3->parent->left == cur3) {
+        cur3->parent->parent->right = cur3;
+        cur3->right = cur3->parent;
+
+        // Make sure everything points correctly
+        if (cur3->parent->parent != NULL) {
+          cur3->parent->parent->right->parent = cur3->parent->parent;
+          cur3->right->parent = cur3;
+        }
+      }
+    } else if (cur3->parent->data < cur3->parent->parent->data && cur3->parent->parent->right != NULL) {
+      // Uncle is on the right
+      if (cur3->parent->parent->right->color == 1 && cur3->parent->right == cur3) {
+        node* temp = cur3->left;
+        node* temp2 = cur3->parent->parent;
+        cur3->parent->parent->left = cur3;
+        cur3->left = cur3->parent;
+
+        // Make sure everything points correctly
+        cur3->parent->right = temp;
+        if (cur3->parent->parent != NULL) {
+          cur3->parent->parent->left->parent = temp2;
+          cur3->left->parent = cur3;
+        }
+      }
+    }
+  }
+}
+
+
+/*void case2(node*&cur3){
   if(cur3->parent != NULL &&cur3->parent->parent != NULL && cur3->parent->parent->right != NULL && cur3->parent->parent->left != NULL){
 
     if(cur3->parent->data>cur3->parent->parent->data && cur3->parent->parent->left != NULL){
@@ -237,8 +271,8 @@ void case2(node*&cur3){
   }
   return;
 }
-
-void case3(node*&cur3){
+*/
+/*void case3(node*&cur3){
   if(cur3->parent != NULL &&cur3->parent->parent != NULL && cur3->parent->parent->right != NULL && cur3->parent->parent->left != NULL){
 
       if(cur3->parent->data>cur3->parent->parent->data && cur3->parent->parent->left != NULL){
@@ -278,4 +312,50 @@ void case3(node*&cur3){
       }
       }
   
+}
+*/
+void case3(node*& cur3) {
+  if (cur3->parent != NULL && cur3->parent->parent != NULL &&
+      cur3->parent->parent->right != NULL && cur3->parent->parent->left != NULL) {
+
+    if (cur3->parent->data > cur3->parent->parent->data &&
+        cur3->parent->parent->left != NULL) {
+      // Uncle on the left
+      if (cur3->parent->parent->left->color == 1 && cur3->parent->right == cur3) {
+        if (cur3->parent->left != NULL) {
+          cur3->parent->parent->right = cur3->parent->left;
+        }
+        cur3->parent->left = cur3->parent->parent;
+        if (cur3->parent->parent->left != NULL) {
+          cur3->parent->parent->left->parent = cur3->parent->parent;
+        }
+        cur3->parent->right = cur3;
+        cur3->parent->color = 1;
+        cur3->parent->parent->color = 2;
+        return;
+      } else {
+        // Do nothing
+        return;
+      }
+    } else if (cur3->parent->data < cur3->parent->parent->data &&
+               cur3->parent->parent->right != NULL) {
+      // Uncle is on the right
+      if (cur3->parent->parent->right->color == 1 && cur3->parent->left == cur3) {
+        if (cur3->parent->right != NULL) {
+          cur3->parent->parent->left = cur3->parent->right;
+        }
+        cur3->parent->right = cur3->parent->parent;
+        if (cur3->parent->parent->right != NULL) {
+          cur3->parent->parent->right->parent = cur3->parent->parent;
+        }
+        cur3->parent->left = cur3;
+        cur3->parent->color = 1;
+        cur3->parent->parent->color = 2;
+        return;
+      } else {
+        // Do nothing
+        return;
+      }
+    }
+  }
 }
