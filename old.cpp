@@ -170,7 +170,7 @@ void print(node *cur2, int layers){
 
 int cases(node*&cur3){  
   //case #1: Uncle is red
-  if(cur3->parent != NULL &&cur3->parent->parent != NULL && cur3->parent->parent->right != NULL && cur3->parent->parent->left != NULL){
+  if(cur3->parent != NULL &&cur3->parent->parent != NULL){
           cout<<"Nothing is NULL"<<endl;
         if(cur3->parent->data>cur3->parent->parent->data && cur3->parent->parent->left != NULL){
           cout<<"Uncle is on the left"<<endl;
@@ -184,6 +184,7 @@ int cases(node*&cur3){
               cur3->parent->parent->color = 2;
             }
           }
+	  cout<<"Case 1 checked(done)"<<endl;
 	  return 1;
         }else if(cur3->parent->data<cur3->parent->parent->data && cur3->parent->parent->right != NULL){
           cout<<"Uncle is on right"<<endl;
@@ -198,8 +199,10 @@ int cases(node*&cur3){
 	      }
           }
         }
+	cout<<"Case 1 checked(done)"<<endl;
 	return 1;
        }
+  cout<<"Case 1 checked"<<endl;
   return 0;
 }
 
@@ -240,7 +243,6 @@ void case0(node*&cur3){
 }
 
 int case2(node*&cur3){
-  cout<<cur3<<endl;
   if(cur3->parent !=NULL && cur3->parent->parent != NULL){
     if(cur3->parent->data > cur3->parent->parent->data){
       //Uncle is on the left
@@ -251,7 +253,8 @@ int case2(node*&cur3){
         //making sure everthing points right
         cur3->parent->parent->right->parent = cur3->parent->parent;
         cur3->right->parent = cur3;
-        return 1;
+	cout<<"Case 2 checked(done)"<<endl;
+	return 1;
       }else{
         //do nothing
       }
@@ -266,6 +269,7 @@ int case2(node*&cur3){
         //making sure everthing points right
         cur3->parent->parent->left->parent = cur3->parent->parent;
         cur3->left->parent = cur3;
+	cout<<"Case 2 checked(done)"<<endl;
 	return 1;
       }else{
         //do nothing
@@ -273,6 +277,7 @@ int case2(node*&cur3){
     }
     
   }
+  cout<<"Case 2 checked"<<endl;
 return 0;
 }
 
@@ -290,6 +295,7 @@ int case3(node*&cur3){
           cur3->parent->right = cur3;
           cur3->parent->color = 1;
           cur3->parent->parent->color = 2;
+	  cout<<"Case 3 checked(done)"<<endl;
           return 1;
       }
 
@@ -304,24 +310,14 @@ int case3(node*&cur3){
           cur3->parent->left = cur3;
           cur3->parent->color = 1;
           cur3->parent->parent->color = 2;
+	  cout<<"Case 3 checked(done)"<<endl;
           return 1;
-
-	  /*
-	     node *temp;
-228        node *temp2;
-229        temp = cur3->left;
-230        temp2 = cur3->parent->parent;
-231        cur3->parent->parent->left = cur3;
-232        cur3->left = cur3->parent;
-233        //making everything right
-234        cur3->parent->right = temp;
-235        cur3->parent->parent->left->parent = temp2;
-236        cur3->left->parent = cur3;
-	   */
         }
       }
+      cout<<"Case 3 checked"<<endl;
       return 0;
       }
 }
+  cout<<"Case 3 checked"<<endl;
   return 0;
 }
