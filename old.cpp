@@ -21,7 +21,7 @@ int main(){//number 1 is black number 2 is red
   bool loop = false;
   
   do{
-    cout<<"type '1' to generate 10 numbers from a file"<<endl;
+    cout<<"type '1' to generate 10 numbers from a file; type '2' to skip and do manual adding"<<endl;
     cin>>userInput;
     cin.get();
 
@@ -33,7 +33,6 @@ int main(){//number 1 is black number 2 is red
     }
 
     else{
-      cout<<"Invalid!!"<<endl;
       cout<<endl;
       loop = true;
     }
@@ -180,7 +179,7 @@ int cases(node*&cur3){
   //in case the current node's parent is the root therefore the grandparent doesn't exist
   if(cur3->parent != NULL){
     if(cur3->parent->parent == NULL){
-      if(cur3->data>cur3->parent->data && cur3->parent->left != NULL){
+      if(cur3->data>cur3->parent->data && cur3->parent->left != NULL && (cur3->left !=NULL || cur3->right != NULL || cur3->parent->left->left != NULL || cur3->parent->left->right != NULL)){
 	if(cur3->parent->left->color == 2){
             cur3->parent->left->color = 1;
             cur3->color = 1;
@@ -191,8 +190,8 @@ int cases(node*&cur3){
               cur3->parent->color = 2;
             }
       }
-      
-      }else if(cur3->data<cur3->parent->data && cur3->parent->right != NULL){
+	
+      }else if(cur3->data<cur3->parent->data && cur3->parent->right != NULL && (cur3->left !=NULL || cur3->right != NULL || cur3->parent->right->left != NULL || cur3->parent->right->right != NULL)){
 	if(cur3->parent->right->color == 2){
             cur3->parent->right->color = 1;
             cur3->parent->color = 2;
@@ -217,9 +216,10 @@ int cases(node*&cur3){
             }else if(cur3->parent->parent->parent != NULL){
               cur3->parent->parent->color = 2;
             }
-          }
-	  cout<<"Case 1 checked(done)"<<endl;
-	  return 1;
+	    cout<<"Case 1 checked(done)"<<endl;
+          return 1;
+	  }
+	  
         }else if(cur3->parent->data<cur3->parent->parent->data && cur3->parent->parent->right != NULL){
           //cout<<"Uncle is on right"<<endl;
           if(cur3->parent->parent->right->color == 2){
@@ -231,10 +231,11 @@ int cases(node*&cur3){
 	    }else if(cur3->parent->parent->parent != NULL){
 	      cur3->parent->parent->color = 2;
 	      }
-          }
+	    cout<<"Case 1 checked(done)"<<endl;
+          return 1;
+	  }
         }
-	cout<<"Case 1 checked(done)"<<endl;
-	return 1;
+        
     }
    }
   cout<<"Case 1 checked"<<endl;
@@ -281,7 +282,7 @@ int case2(node*&cur3){
   if(cur3->parent !=NULL && cur3->parent->parent != NULL){
     if(cur3->parent->data > cur3->parent->parent->data){
       //Uncle is on the left
-      if((cur3->parent->parent->left == NULL || cur3->parent->parent->left->color == 1) && cur3->parent->left == cur3 && cur3->parent->color == 2){
+      if((cur3->parent->parent->left == NULL || cur3->parent->parent->left->color == 1) && cur3->parent->left == cur3 && cur3->parent->color == 2&&cur3->parent->parent !=NULL){
 	node *temp2 = cur3->parent;
 	node *temp3 = cur3->right;
 	cur3->parent->parent->right = cur3;
@@ -299,15 +300,15 @@ int case2(node*&cur3){
 
     else if(cur3->parent->data<cur3->parent->parent->data){
       //Uncle is on right
-      if((cur3->parent->parent->right == NULL || cur3->parent->parent->right->color == 1) && cur3->parent->right == cur3 && cur3->parent->color == 2){
+      if((cur3->parent->parent->right == NULL || cur3->parent->parent->right->color == 1) && cur3->parent->right == cur3 && cur3->parent->color == 2 && cur3->parent->parent != NULL){
 	node *temp = cur3->parent;
 	node *temp4 = cur3->left;
 	cur3->parent->parent->left = cur3;
 	cur3->left = temp;
         //making sure everthing points right
 	temp->right = temp4;
-        cur3->parent->parent->left->parent = cur3->parent->parent;
-	cur3->left->parent = cur3;
+        temp->parent = cur3;
+	//cur3->left->parent = cur3;
 	cout<<"Case 2 checked(done)"<<endl;
 	return 1;
       }else{
