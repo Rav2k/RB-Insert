@@ -164,14 +164,14 @@ void print(node *cur2, int layers){
   if(cur2 == NULL){
     return;
   }
-  print(cur2->right, layers+1);//right side printing 
+  print(cur2->left, layers+1);//right side printing 
 
   for(int i = 0; i<layers;i++){
     cout<<"     ";
   }
 
   cout<<cur2->data<<"("<<cur2->color<<")"<<endl;
-  print(cur2->left, layers+1);//print the left side
+  print(cur2->right, layers+1);//print the left side
 }
 
 int cases(node*&cur3){  
@@ -264,18 +264,15 @@ void fileGen(){//taking the numbers from the text file and making the base tree
   cout<<"done";
 }
 
-void case0(node*&cur3){
+void case0(node*&cur3) {
   node *temp;
-   temp = cur3;
-   while(temp->parent !=NULL){
-     temp = temp->parent;
-   }
-   if(temp->color != 1){
-     temp->color =1;
-   }else{
-     //do notthing
-   }
-
+  temp = cur3;
+  while (temp->parent != NULL) {
+    temp = temp->parent;
+  }
+  if (temp->color != 1) {
+    temp->color = 1;
+  }
 }
 
 int case2(node*&cur3){
@@ -327,7 +324,7 @@ int case3(node*&cur3){
       if(cur3->parent->data>cur3->parent->parent->data&&(cur3->parent->parent->left->color == 1 || cur3->parent->parent->left == NULL)){
         //uncle on left
         if(cur3->parent->right == cur3){
-          if(cur3->parent->left!=NULL){
+          if(cur3->parent->left==NULL){
             cur3->parent->parent->right = cur3->parent->left;
           }
           cur3->parent->left = cur3->parent->parent;
