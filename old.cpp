@@ -282,12 +282,13 @@ int case2(node*&cur3){
       if((cur3->parent->parent->left == NULL || cur3->parent->parent->left->color == 1) && cur3->parent->left == cur3 && cur3->parent->color == 2&&cur3->parent->parent !=NULL){
 	node *temp2 = cur3->parent;
 	node *temp3 = cur3->right;
+	node *temps =cur3->parent->parent->right;
 	cur3->parent->parent->right = cur3;
         cur3->right = temp2;
         //making sure everthing points right
 	temp2->left = temp3;
-        cur3->parent->parent->right->parent = cur3->parent->parent;
-        cur3->right->parent = cur3;
+        temps->parent = temp2->parent;
+        temp2->parent = cur3;
 	cout<<"Case 2 checked(done)"<<endl;
 	return 1;
       }else{
@@ -318,60 +319,75 @@ return 0;
 }
 int case3(node*&cur3){
   if(cur3->parent != NULL && cur3->parent->parent != NULL){
-      if(cur3->parent->data>cur3->parent->parent->data&&(cur3->parent->parent->left->color == 1 || cur3->parent->parent->left == NULL)){
+      if(cur3->parent->data>cur3->parent->parent->data && (cur3->parent->parent->left == NULL||c\
+ur3->parent->parent->left->color == 1)){
         //uncle on left
         if(cur3->parent->right == cur3){
           node *grand2 = cur3->parent->parent;
           node *par2 =cur3->parent;
-          node *save2 = par2->right;
-          if(cur3->parent->right == NULL){
-            //par->right = grand->left;
-	    if(cur3->parent->left == NULL){
+          node *save2 = par2->left;
+	  if(cur3->parent->left == NULL){
             if(root->data == grand2->data){
             root=par2;
-            par2->right=cur3;
-            par2->left= grand2;
+	    par2->right=cur3;
+	    par2->left= grand2;
+	    
             grand2->left = save2;//?
             par2->parent= grand2->parent;
             grand2->parent=par2;
+	    grand2->right=NULL;
             par2->color=1;
             grand2->color=2;
             }else{
-              par2->right=cur3;
-            par2->left= grand2;
+	      par2->right=cur3;
+	      par2->left= grand2;
+            
             grand2->left = save2;//?
             par2->parent= grand2->parent;
             grand2->parent=par2;
+	    grand2->right=NULL;
             par2->color=1;
             grand2->color=2;
             }
 	    }else{
-            node *unc = grand2->left;
+            node *unc2 = grand2->left;
 	    if(root->data == par2->data){
 	      root =par2;
 	      par2->right=cur3;
-	    grand->left->left = unc;
-            par2->left= grand2;
+	      par2->left= grand2;
+            
+	    grand2->left->left = unc2;
             grand2->left = save2;//?
             par2->parent= grand2->parent;
             grand2->parent=par2;
+	    //grand2->right=NULL;
             par2->color=1;
             grand2->color=2;
+            
 	    }else{
 	      par2->right=cur3;
-            grand->left->left = unc;
+	       par2->left= grand2;
+            grand2->left->left = unc2;
+            grand2->left = save2;//?
+            par2->parent= grand2->parent;
+            grand2->parent=par2;
+	    //grand2->right=NULL;
+            par2->color=1;
+            grand2->color=2;
+	      /*par2->right=cur3;
+            grand2->left->left = unc2;
             par2->left= grand2;
             grand2->left = save2;//?
             par2->parent= grand2->parent;
             grand2->parent=par2;
             par2->color=1;
-            grand2->color=2;
+            grand2->color=2;*/
 	    }
             
           }
 	  cout<<"Case 3 checked(done)"<<endl;
           return 1;
-      }
+	}
       }
       else if(cur3->parent->data<cur3->parent->parent->data && (cur3->parent->parent->right == NULL||cur3->parent->parent->right->color == 1)){
         //uncle is right
@@ -388,6 +404,7 @@ int case3(node*&cur3){
 	    grand->left = save; 
 	    par->parent= grand->parent;
             grand->parent=par;
+	    grand->left=NULL;
             par->color=1;
             grand->color=2;
 	    }else{
@@ -396,6 +413,7 @@ int case3(node*&cur3){
 	    par->parent= grand->parent;
 	    grand->left = save;
 	    grand->parent=par;
+	    grand->left=NULL;
             par->color=1;
             grand->color=2;
 	    }
@@ -410,6 +428,7 @@ int case3(node*&cur3){
             grand->left = save;
             par->parent= grand->parent;
             grand->parent=par;
+	    //grand2->left=NULL;
             par->color=1;
             grand->color=2;
 	    }else{
@@ -419,18 +438,19 @@ int case3(node*&cur3){
             grand->left = save;
             par->parent= grand->parent;
             grand->parent=par;
-            par->color=1;
+	    //grand2->left=NULL;
+	    par->color=1;
             grand->color=2;
 	  }
 	  cout<<"Case 3 checked(done)"<<endl;
           return 1;
         }
       }
-      cout<<"Case 3 checked"<<endl;
-      return 0;
+      
       }
   cout<<"Case 3 checked"<<endl;
   return 0;
-      }
   }
-}
+  cout<<"Case 3 checked"<<endl;
+  return 0;
+  }
