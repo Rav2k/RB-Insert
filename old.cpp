@@ -247,21 +247,11 @@ void fileGen(){//taking the numbers from the text file and making the base tree
   ifstream numbers("numbers2.txt");
   srand(time(NULL));
   int num = 0;
-  vector<int> nums;
   while (!numbers.eof()) {
     numbers >> num;
-    nums.push_back(num);
-  }
-  int randomIndex = 0;
-  int counter = 0;
-  while (counter != 10) {
-    randomIndex = (rand() % nums.size()) + 1;
-    num = nums.at(randomIndex);
     insert(root, num);
-    counter++;
-    
   }
-  cout<<"done";
+  
 }
 
 void case0(node*&cur3) {
