@@ -327,7 +327,7 @@ return 0;
 int case3(node*&cur3){
   if(cur3->parent != NULL && cur3->parent->parent != NULL){
       if(cur3->parent->data>cur3->parent->parent->data && (cur3->parent->parent->left == NULL||c\
-ur3->parent->parent->left->color == 1)){
+ur3->parent->parent->left->color == 1)&&cur3->parent->left==NULL){
         //uncle on left
         if(cur3->parent->right == cur3){
           node *grand2 = cur3->parent->parent;
@@ -396,7 +396,7 @@ ur3->parent->parent->left->color == 1)){
           return 1;
         }
       }
-      else if(cur3->parent->data<cur3->parent->parent->data && (cur3->parent->parent->right == NULL||cur3->parent->parent->right->color == 1)){
+      else if(cur3->parent->data<cur3->parent->parent->data && (cur3->parent->parent->right == NULL||cur3->parent->parent->right->color == 1)&&cur3->parent->right==NULL){
         //uncle is right
         if(cur3->parent->left == cur3){
           node *grand = cur3->parent->parent;
