@@ -411,7 +411,7 @@ ur3->parent->parent->left->color == 1)){
             grand->left = save;
             par->parent= grand->parent;
             grand->parent=par;
-            par->parent->left=par;
+            //par->parent->left=par;
             par->color=1;
             grand->color=2;
 	    return 1;
@@ -437,7 +437,7 @@ ur3->parent->parent->left->color == 1)){
             grand->left = save;
             par->parent= grand->parent;
             grand->parent=par;
-	    par->parent->left=par;
+	    //par->parent->left=par;
             //grand2->left=NULL;
             par->color=1;
             grand->color=2;
