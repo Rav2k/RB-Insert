@@ -13,7 +13,7 @@ void print(node *cur2, int layers);
 int cases(node*&cur3);
 void case0(node*&cur3);
 int case2(node*&cur3);
-int case3(node*&cur3, int num);
+int case3(node*&cur3);
 node *root = NULL;
 
 int main(){//number 1 is black number 2 is red 
@@ -109,21 +109,20 @@ se then...
         }
         if(case2(cur->right) == 1){
           cout<<"case 2 finished"<<endl;
-          cas3=1;
+	  return;
         }//triangle
         else{
           cout<<"Did not do case 2"<<endl;
-          cas3=0;
           //do nothing
-        }
-	if(case3(temp2,cas3) == 1){
+	}
+	if(case3(cur->right) == 1){//temp2
           cout<<"case 3 finished"<<endl;
           return;
-        }///line
+        }//line
         else{
           cout<<"Did not do case 3"<<endl;
           return;
-        }
+	  }
       }
       else{
         insert(cur->right, number);//if there is something there already go to the right one which is \
@@ -148,15 +147,14 @@ f the current's data
         }
         if(case2(cur->left) == 1){
           cout<<"case 2 finished"<<endl;
-          cas3=1;
+	  return;
         }//triangle
         else{
           cout<<"Did not do case 2"<<endl;
-          cas3=0;
           //do nothing
         }
-        if(case3(temp, cas3)==1){
-
+        if(case3(cur->left)==1){//if problem do temp
+	  cout<<"case 3 finished"<<endl;
           return;
         }///line
         else{
@@ -291,7 +289,7 @@ int case2(node*&cur3){
         temps->parent = temp2->parent;
         temp2->parent = cur3;
 	cout<<"Case 2 checked(done)"<<endl;
-	case3(cur3->right, 1);
+	case3(cur3->right);
 	return 1;
       }else{
         //do nothing
@@ -302,15 +300,21 @@ int case2(node*&cur3){
       //Uncle is on right
       if((cur3->parent->parent->right == NULL || cur3->parent->parent->right->color == 1) && cur3->parent->right == cur3 && cur3->parent->color == 2 && cur3->parent->parent != NULL){
 	node *temp = cur3->parent;
-	node *temp4 = cur3->left;
-	cur3->parent->parent->left = cur3;
-	cur3->left = temp;
+	node *temp2 = cur3;
+	node *temp4 = cur3->parent->parent;
+	//delete cur3->parent->right;
+	temp2->parent->parent->left = temp2;
+	temp2->left = temp;
+	temp2->parent = temp4;
+	temp->parent = temp2;//?
+	//temp2->left->parent = temp2;
+	temp2->left->right= NULL;
         //making sure everthing points right
-	temp->right = temp4;
-        temp->parent = cur3;
+	//temp->right = temp4;
+        //temp->parent = cur3;
 	//cur3->left->parent = cur3;
 	cout<<"Case 2 checked(done)"<<endl;
-	case3(cur3->left, 1);
+	case3(temp2->left);
 	return 1;
       }else{
         //do nothing
@@ -320,36 +324,7 @@ int case2(node*&cur3){
   cout<<"Case 2 checked"<<endl;
 return 0;
 }
-int case3(node*&cur3, int num){
-  if(num == 1){
-    if(cur3->parent != NULL&&cur3->parent->parent != NULL){
-      if(cur3->parent->data>cur3->parent->parent->data && (cur3->parent->parent->left == NULL||cur3->parent->parent->left->color == 1)){
-        if(cur3->parent->right ==cur3){
-          node *paren=cur3->parent;
-          node *child = cur3->right;
-          cur3->left= paren;
-          cur3->right=child;
-          cur3->color=1;
-            paren->color= 2;
-          cur3->parent=paren->parent;
-          paren->parent=cur3;
-        }
-      }
-      else if(cur3->parent->data<cur3->parent->parent->data && (cur3->parent->parent->right == NULL||cur3->parent->parent->right->color == 1)){
-        node *paren2=cur3->parent;
-        node *child2 = cur3->right;
-        cur3->right = paren2;
-        cur3->left=child2;
-        cur3->color=1;
-        paren2->color=2;
-        cur3->parent=paren2->parent;
-        paren2->parent=cur3;
-      }
-
-
-      }
-    }
-  else if(num==0){
+int case3(node*&cur3){
   if(cur3->parent != NULL && cur3->parent->parent != NULL){
       if(cur3->parent->data>cur3->parent->parent->data && (cur3->parent->parent->left == NULL||c\
 ur3->parent->parent->left->color == 1)){
@@ -436,18 +411,20 @@ ur3->parent->parent->left->color == 1)){
             grand->left = save;
             par->parent= grand->parent;
             grand->parent=par;
-            grand->left=NULL;
+            par->parent->left=par;
             par->color=1;
             grand->color=2;
+	    return 1;
 	    }else{
               par->right=grand;
             par->left= cur3;
             par->parent= grand->parent;
             grand->left = save;
             grand->parent=par;
-            grand->left=NULL;
+            par->parent->left=par;//?
             par->color=1;
             grand->color=2;
+	    return 1;
             }
 
           }else{
@@ -460,9 +437,11 @@ ur3->parent->parent->left->color == 1)){
             grand->left = save;
             par->parent= grand->parent;
             grand->parent=par;
+	    par->parent->left=par;
             //grand2->left=NULL;
             par->color=1;
             grand->color=2;
+	    return 1;
             }else{
 	      par->right=grand;
             grand->right->right = unc;
@@ -470,12 +449,13 @@ ur3->parent->parent->left->color == 1)){
             grand->left = save;
             par->parent= grand->parent;
             grand->parent=par;
+	    par->parent->left=par;
             //grand2->left=NULL;
             par->color=1;
             grand->color=2;
+	    return 1;
           }
           cout<<"Case 3 checked(done)"<<endl;
-          return 1;
         }
       }
 
@@ -483,8 +463,8 @@ ur3->parent->parent->left->color == 1)){
   cout<<"Case 3 checked"<<endl;
   return 0;
   }
-}
+
   cout<<"Case 3 checked"<<endl;
   return 0;
-
 }
+
