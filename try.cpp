@@ -14,6 +14,8 @@ int cases(node*&cur3);
 void case0(node*&cur3);
 int case2(node*&cur3);
 int case3(node*&cur3);
+void search(node*cur, int num);
+void deletion(node *cur, int num);
 node *root = NULL;
 
 int main(){//number 1 is black number 2 is red 
@@ -49,6 +51,10 @@ int main(){//number 1 is black number 2 is red
   cout<<endl;
   cout<<"to quit type 'quit'"<<endl;
     cout<<endl;
+    cout<<"to search type 'search'"<<endl;
+    cout<<endl;
+    cout<<"to delete type 'delete'"<<endl;
+    cout<<endl;
     cout<<"What do you want to do?: "<<endl;
     cin.get(user, 20);
     cin.get();
@@ -68,6 +74,12 @@ int main(){//number 1 is black number 2 is red
       cout<<endl;
       print(root, 0);
       cout<<endl;
+    }
+    else if(strcmp(user, "search")==0){
+      cout<<"Enter number: "<<endl;
+      cin>>userNum;
+      cin.get();
+      search(root, userNum);
     }
     else{
       cout<<"type something valid"<<endl;
@@ -327,7 +339,7 @@ return 0;
 int case3(node*&cur3){
   if(cur3->parent != NULL && cur3->parent->parent != NULL){
       if(cur3->parent->data>cur3->parent->parent->data && (cur3->parent->parent->left == NULL||c\
-ur3->parent->parent->left->color == 1)&&cur3->parent->left==NULL){
+ur3->parent->parent->left->color == 1)&&cur3->parent->left==NULL&&cur3->color==2&&cur3->parent->color==2){//node and parent must be red.
         //uncle on left
         if(cur3->parent->right == cur3){
           node *grand2 = cur3->parent->parent;
@@ -396,7 +408,7 @@ ur3->parent->parent->left->color == 1)&&cur3->parent->left==NULL){
           return 1;
         }
       }
-      else if(cur3->parent->data<cur3->parent->parent->data && (cur3->parent->parent->right == NULL||cur3->parent->parent->right->color == 1)&&cur3->parent->right==NULL){
+      else if(cur3->parent->data<cur3->parent->parent->data && (cur3->parent->parent->right == NULL||cur3->parent->parent->right->color == 1)&&cur3->parent->right==NULL&&cur3->color==2&&cur3->parent->color==2){//node and parent must be red.
         //uncle is right
         if(cur3->parent->left == cur3){
           node *grand = cur3->parent->parent;
@@ -468,3 +480,30 @@ ur3->parent->parent->left->color == 1)&&cur3->parent->left==NULL){
   return 0;
 }
 
+void search(node* cur, int num){//cur should start at the root
+  if(cur == NULL){
+    cout<<"Number is not in the tree"<<endl;
+    return;
+  }else if(cur->data == num){
+    cout<<"Number found"<<endl;
+    return;
+  }
+  else{
+    if(num>cur->data){//recursively transverse down the tree
+      search(cur->right, num);
+    }else{
+      search(cur->left, num);
+    }
+  }
+}
+
+
+void deletion(node *cur, int num){
+  if(cur==NULL){
+    return;
+  }
+  if(num>cur->data){
+    cur->right;
+  }
+  
+}
