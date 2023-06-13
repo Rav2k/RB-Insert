@@ -16,6 +16,7 @@ int case2(node*&cur3);
 int case3(node*&cur3);
 void search(node*cur, int num);
 void deletion(node *cur, int num);
+void correctDelete(node *cur, node *par);
 node *root = NULL;
 
 int main(){//number 1 is black number 2 is red 
@@ -80,6 +81,12 @@ int main(){//number 1 is black number 2 is red
       cin>>userNum;
       cin.get();
       search(root, userNum);
+    }
+    else if(strcmp(user, "delete")==0){
+      cout<<"Number to delete: "<<endl;
+      cin>>userNum;
+      cin.get();
+      deletion(root, userNum);
     }
     else{
       cout<<"type something valid"<<endl;
@@ -510,7 +517,274 @@ void deletion(node *cur, int num){
     return;
   }
   if(num>cur->data){
-    cur->right;
+    deletion(cur->right, num);
   }
-  
+  if(num<cur->data){
+    deletion(cur->left, num);
+  }
+
+  else{
+    if(cur->right == NULL && cur->left == NULL){
+      if(cur==root){
+	delete cur;
+	return;
+      }
+      if(cur->color == 2){
+	delete cur;
+	return;
+      }
+      else{
+	node *temp = cur->right;
+	node *temp2 = cur->parent;
+	delete cur;
+	correctDelete(temp, temp2);
+	//deleteCorrection(temp, temp2);//need to do the correction
+	return;
+      }
+      return;
+    }
+    //one left child
+    else if(cur->right == NULL){
+      if(cur->color==2){
+	node *temp = cur->left;
+	delete cur;
+	return;
+      }
+      else{
+	if(cur->left->color ==2){
+	  node *temp = cur->left;
+	  delete cur;
+	  temp->color=1;
+	  return;
+	}
+	else{
+	  node *temp = cur->left;
+	  delete cur;
+	  correctDelete(temp, temp->parent);
+	  //deleteCorrection(temp, temp->parent);//need to do the correction
+	  return;
+	}
+      }
+      return;
+    }
+    else if(cur->left == NULL){//right
+      if(cur->color == 2){
+	node *temp =cur->right;
+	delete cur;
+	return;
+      }
+      else{
+	if(cur->right->color == 2){
+	  node *temp = cur->right;
+	  delete cur;
+	  temp->color = 1;
+	  return;
+	}
+	else{
+	  node *temp = cur->right;
+	  delete cur;
+	  correctDelete(temp, temp->parent);
+	  //deleteCorrection(temp, temp2);//need to do the correction
+	  return;
+	}
+      }
+      return;
+    }
+    else{//two children 
+      node *successor = cur->left;
+      node *succParent = cur;
+
+      while(successor->right != NULL){
+	succParent = successor;
+	successor = successor->right;
+      }
+      if(succParent != cur){
+	succParent->right = successor->left;
+	if(successor->color == 2){
+	  if(succParent->right != NULL && succParent->right->color == 2){
+	    succParent->right->color = 2;
+	  }
+	  else{
+	    correctDelete(succParent->right, succParent);
+	  }
+	}
+      }
+      else{
+	succParent->left = successor->left;
+	if(successor->color==2){
+	  if(succParent->left != NULL && succParent->left->color == 2){
+	    succParent->left->color = 1;
+	  }
+	  else{
+	    correctDelete(succParent->left, succParent);
+	    
+	  }
+	}
+      }
+      cur->data = successor->data;
+      delete successor;
+      return;
+    }
+  }
+  return;
 }
+
+void correctDelete(node *cur, node *par){
+  node *temps =NULL;//sibiling holder
+  if(cur==NULL){
+    return;
+  }
+  else{
+    if(par->left == cur){
+      temps = par->right;
+    }else{
+      temps =par->left;
+    }
+    if(temps != NULL){
+      if(temps->color == 2 && par->color == 1){
+	temps->color = 1;
+	par->color=2;
+	if(temps->parent->right == temps){
+	  //rotate the par left
+	  node *temp = par->right;
+          par->right = temp->left;
+          if(temp->left!=NULL){
+            temp->left->parent=par;
+          }
+          temp->left= par;
+          temp->parent = par->parent;
+          if(par->parent==NULL){
+            root=temp;
+          }
+          else if(par==par->parent->left){
+            par->parent->left = temp;
+          }
+          else{
+            par->parent->right = temp;
+          }
+          par->parent = temp;
+        }else{
+	  //rotate par right
+	  node *temp = par->left;
+	  par->left = temp->right;
+	  if(temp->right!=NULL){
+	    temp->right->parent=par;
+	  }
+	  temp->right = par;
+	  temp->parent = par->parent;
+	  if(par->parent==NULL){
+	    root=temp;
+	  }
+	  else if(par==par->parent->left){
+	    par->parent->left = temp;
+	  }
+	  else{
+	    par->parent->right = temp;
+	  }
+	  par->parent = temp;
+	}
+    }
+      if(temps->color == 1 && par->color == 1 && (temps->left == NULL || temps->left->color == 1) &&(temps->right == NULL || temps->right->color==1)){
+	temps->color = 2;
+	correctDelete(par, par->parent);
+      }
+      else if(temps->color == 2 && par->color == 1 && (temps->left == NULL || temps->left->color == 1) &&(temps->right == NULL || temps->right->color==1)){
+	par->color=1;
+	temps->color=2;
+	return;
+      }
+      else if(temps->parent->left == temps && temps->color == 1 && (temps->left==NULL || temps->left->color == 1)&& temps->right != NULL && temps->right->color == 2){
+	temps->color = 2;
+	temps->right->color = 1;
+	//rotate temps left
+	node *temp = temps->right;
+          temps->right = temp->left;
+          if(temp->left!=NULL){
+            temp->left->parent=temps;
+          }
+          temp->left = temps;
+          temp->parent = temps->parent;
+          if(temps->parent==NULL){
+            root=temp;
+          }
+          else if(temps==temps->parent->left){
+            temps->parent->left = temp;
+          }
+          else{
+            temps->parent->right = temp;
+          }
+          temps->parent = temp;
+        
+      }
+      else if(temps->parent->right==temps && temps->color == 1 &&(temps->right == NULL || temps->right->color == 1) && temps->left->color==2){
+	temps->color = 2;
+	temps->left->color = 1;
+	//rotate right temps
+	node *temp = temps->left;
+          temps->left = temp->right;
+          if(temp->right!=NULL){
+            temp->right->parent=temps;
+          }
+          temp->right = temps;
+          temp->parent = temps->parent;
+          if(temps->parent==NULL){
+            root=temp;
+          }
+          else if(temps==temps->parent->left){
+            temps->parent->left = temp;
+          }
+          else{
+            temps->parent->right = temp;
+          }
+          temps->parent = temp;
+      }
+      if(temps->color == 1 && temps->parent->left==temps && temps->left != NULL && temps->left->color == 2){
+	temps->color = par->color;
+	par->color = 1;
+	//rotate right par
+	node *temp = par->left;
+          par->left = temp->right;
+          if(temp->right!=NULL){
+            temp->right->parent=par;
+          }
+          temp->right = par;
+          temp->parent = par->parent;
+          if(par->parent==NULL){
+            root=temp;
+          }
+          else if(par==par->parent->left){
+            par->parent->left = temp;
+          }
+          else{
+            par->parent->right = temp;
+          }
+          par->parent = temp;
+	return;
+      }
+      else if(temps->color == 1 && temps->parent->left==temps && temps->left != NULL && temps->left->color == 2){
+	temps->color = par->color;
+	par->color = 1;
+	//rotate left par
+	node *temp = par->right;
+          par->right = temp->left;
+          if(temp->left!=NULL){
+            temp->left->parent=par;
+          }
+          temp->left= par;
+          temp->parent = par->parent;
+          if(par->parent==NULL){
+            root=temp;
+          }
+          else if(par==par->parent->left){
+            par->parent->left = temp;
+          }
+          else{
+            par->parent->right = temp;
+          }
+          par->parent = temp;
+	return;
+      }
+    }
+  }
+}
+
