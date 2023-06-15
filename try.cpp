@@ -87,6 +87,7 @@ int main(){//number 1 is black number 2 is red
       cin>>userNum;
       cin.get();
       deletion(root, userNum);
+      cout<<"Deleted"<<endl;
     }
     else{
       cout<<"type something valid"<<endl;
@@ -516,14 +517,14 @@ void deletion(node *cur, int num){
   if(cur==NULL){
     return;
   }
-  if(num>cur->data){
+  else if(num>cur->data){
     deletion(cur->right, num);
   }
-  if(num<cur->data){
+  else if(num<cur->data){
     deletion(cur->left, num);
   }
 
-  else{
+  else if(num == cur->data){
     if(cur->right == NULL && cur->left == NULL){
       if(cur==root){
 	delete cur;
@@ -536,9 +537,29 @@ void deletion(node *cur, int num){
       else{
 	node *temp = cur->right;
 	node *temp2 = cur->parent;
-	delete cur;
-	correctDelete(temp, temp2);
-	//deleteCorrection(temp, temp2);//need to do the correction
+	node *temp3= cur->parent->right;
+	if(cur->parent->left == cur){
+	  cur->parent->left = NULL;
+	  delete cur;
+	  temp2->right = temp2->right->left;
+	  temp2->right->parent = temp2;
+	  temp2->right->right = temp3;
+	  temp3->left = NULL;
+	  temp2->right->color = 1;
+	  temp2->parent->right = temp2->right;
+	  temp2->right->left = temp2;
+	  temp2->parent = temp2->right;
+	  temp2->right = NULL;
+	  temp2->color = 1;
+	  temp2->parent->color =2;
+	  temp2->parent->right->color =1;
+	}
+	else if(cur->parent->right == cur){
+	   cur->parent->right = NULL;
+	   delete cur;
+	}
+	 
+	//correctDelete(temp, temp2);
 	return;
       }
       return;
@@ -561,7 +582,6 @@ void deletion(node *cur, int num){
 	  node *temp = cur->left;
 	  delete cur;
 	  correctDelete(temp, temp->parent);
-	  //deleteCorrection(temp, temp->parent);//need to do the correction
 	  return;
 	}
       }
@@ -584,7 +604,6 @@ void deletion(node *cur, int num){
 	  node *temp = cur->right;
 	  delete cur;
 	  correctDelete(temp, temp->parent);
-	  //deleteCorrection(temp, temp2);//need to do the correction
 	  return;
 	}
       }
